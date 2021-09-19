@@ -27,7 +27,7 @@ type CancelResponse struct {
 	PaymentID      string `json:"PaymentId"`      // Уникальный идентификатор транзакции в системе Банка
 }
 
-func (c *Client) Cancel(request *CancelRequest) (*CancelResponse, error) {
+func (c *client) Cancel(request *CancelRequest) (*CancelResponse, error) {
 	response, err := c.PostRequest("/Cancel", request)
 	if err != nil {
 		return nil, err

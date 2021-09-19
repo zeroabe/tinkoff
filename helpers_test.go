@@ -4,10 +4,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/nikita-vanyasin/tinkoff"
+	"github.com/zeroabe/tinkoff"
 )
 
-func helperCreateClient(tb testing.TB) *tinkoff.Client {
+func helperCreateClient(tb testing.TB) tinkoff.Client {
 	tb.Helper()
 
 	tk := os.Getenv("TERMINAL_KEY")

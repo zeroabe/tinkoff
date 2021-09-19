@@ -21,7 +21,7 @@ type GetStateResponse struct {
 	PaymentID string `json:"PaymentId"` // Уникальный идентификатор транзакции в системе Банка
 }
 
-func (c *Client) GetState(request *GetStateRequest) (*GetStateResponse, error) {
+func (c *client) GetState(request *GetStateRequest) (*GetStateResponse, error) {
 	response, err := c.PostRequest("/GetState", request)
 	if err != nil {
 		return nil, err

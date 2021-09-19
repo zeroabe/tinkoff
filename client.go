@@ -6,38 +6,57 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"sort"
 )
 
+const (
+	APIV2BaseURL = "https://securepay.tinkoff.ru/v2"
+)
+
 // Client is the main entity which execute request against the Tinkoff Acquiring API endpoint
-type Client struct {
-	terminalKey string
-	password    string
-	baseURL     string
-}
+type (
+	Client interface {
+		SetBaseURL(baseURL string)
+		Init(request *InitRequest) (*InitResponse, error)
+		ParseNotification(requestBody io.Reader) (*Notification, error)
+		GetNotificationSuccessResponse() string
+		GetState(request *GetStateRequest) (*GetStateResponse, error)
+		//PostRequest(url string, request RequestInterface) (*http.Response, error)
+		Resend() (*ResendResponse, error)
+		Cancel(request *CancelRequest) (*CancelResponse, error)
+		Confirm(request *ConfirmRequest) (*ConfirmResponse, error)
+	}
+
+	client struct {
+		terminalKey string
+		password    string
+		baseURL     string
+	}
+)
 
 // NewClient returns new Client instance
-func NewClient(terminalKey, password string) *Client {
-	return &Client{
+func NewClient(terminalKey, password string) Client {
+	return &client{
 		terminalKey: terminalKey,
 		password:    password,
-		baseURL:     "https://securepay.tinkoff.ru/v2",
+		baseURL:     APIV2BaseURL,
 	}
 }
 
 // SetBaseURL allows to change default API endpoint
-func (c *Client) SetBaseURL(baseURL string) {
+func (c *client) SetBaseURL(baseURL string) {
 	c.baseURL = baseURL
 }
 
-func (c *Client) decodeResponse(response *http.Response, result interface{}) error {
+func (c *client) decodeResponse(response *http.Response, result interface{}) error {
 	return json.NewDecoder(response.Body).Decode(result)
 }
 
 // PostRequest will automatically sign the request with token
 // Use BaseRequest type to implement any API request
-func (c *Client) PostRequest(url string, request RequestInterface) (*http.Response, error) {
+func (c *client) PostRequest(url string, request RequestInterface) (*http.Response, error) {
 	c.secureRequest(request)
 	data, err := json.Marshal(request)
 	if err != nil {
@@ -47,7 +66,7 @@ func (c *Client) PostRequest(url string, request RequestInterface) (*http.Respon
 	return resp, err
 }
 
-func (c *Client) secureRequest(request RequestInterface) {
+func (c *client) secureRequest(request RequestInterface) {
 	request.SetTerminalKey(c.terminalKey)
 
 	v := request.GetValuesForToken()
