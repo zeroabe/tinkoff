@@ -61,7 +61,7 @@ type InitResponse struct {
 	PaymentURL string `json:"PaymentURL,omitempty"` // Ссылка на страницу оплаты. По умолчанию ссылка доступна в течении 24 часов.
 }
 
-func (c *Client) Init(request *InitRequest) (*InitResponse, error) {
+func (c *client) Init(request *InitRequest) (*InitResponse, error) {
 	response, err := c.PostRequest("/Init", request)
 	if err != nil {
 		return nil, err

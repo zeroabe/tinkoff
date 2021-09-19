@@ -54,7 +54,7 @@ func (n *Notification) GetValuesForToken() map[string]string {
 	return result
 }
 
-func (c *Client) ParseNotification(requestBody io.Reader) (*Notification, error) {
+func (c *client) ParseNotification(requestBody io.Reader) (*Notification, error) {
 	bytes, err := ioutil.ReadAll(requestBody)
 	if err != nil {
 		return nil, err
@@ -87,6 +87,6 @@ func (c *Client) ParseNotification(requestBody io.Reader) (*Notification, error)
 	return &notification, nil
 }
 
-func (c *Client) GetNotificationSuccessResponse() string {
+func (c *client) GetNotificationSuccessResponse() string {
 	return "OK"
 }

@@ -13,7 +13,7 @@ type ResendResponse struct {
 	Count int `json:"Count"` // Количество сообщений, отправляемых повторно
 }
 
-func (c *Client) Resend() (*ResendResponse, error) {
+func (c *client) Resend() (*ResendResponse, error) {
 	response, err := c.PostRequest("/Resend", &ResendRequest{})
 	if err != nil {
 		return nil, err

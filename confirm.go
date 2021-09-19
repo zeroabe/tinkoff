@@ -24,7 +24,7 @@ type ConfirmResponse struct {
 	PaymentID string `json:"PaymentId"` // Идентификатор платежа в системе банка.
 }
 
-func (c *Client) Confirm(request *ConfirmRequest) (*ConfirmResponse, error) {
+func (c *client) Confirm(request *ConfirmRequest) (*ConfirmResponse, error) {
 	response, err := c.PostRequest("/Confirm", request)
 	if err != nil {
 		return nil, err
